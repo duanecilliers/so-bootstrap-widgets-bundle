@@ -83,7 +83,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 * @action plugins_loaded
 	 */
 	function set_plugin_textdomain(){
-		load_plugin_textdomain('siteorigin-widgets', false, dirname( plugin_basename( __FILE__ ) ). '/languages/');
+		load_plugin_textdomain('so-bootstrap-widgets', false, dirname( plugin_basename( __FILE__ ) ). '/languages/');
 	}
 
 	/**
@@ -106,11 +106,11 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 				$upload_dir = wp_upload_dir();
 
 				// Remove any old widget cache files, if they exist.
-				$list = $wp_filesystem->dirlist( $upload_dir['basedir'] . '/siteorigin-widgets/' );
+				$list = $wp_filesystem->dirlist( $upload_dir['basedir'] . '/so-bootstrap-widgets/' );
 				if( !empty($list) ) {
 					foreach($list as $file) {
 						// Delete the file
-						$wp_filesystem->delete( $upload_dir['basedir'] . '/siteorigin-widgets/' . $file['name'] );
+						$wp_filesystem->delete( $upload_dir['basedir'] . '/so-bootstrap-widgets/' . $file['name'] );
 					}
 				}
 			}
@@ -172,8 +172,8 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 */
 	function admin_enqueue_scripts($prefix) {
 		if( $prefix != 'plugins_page_so-widgets-plugins' ) return;
-		wp_enqueue_style( 'siteorigin-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin.css', array(), SOW_BUNDLE_VERSION );
-		wp_enqueue_script( 'siteorigin-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin' . SOW_BUNDLE_JS_SUFFIX . '.js', array(), SOW_BUNDLE_VERSION );
+		wp_enqueue_style( 'so-bootstrap-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin.css', array(), SOW_BUNDLE_VERSION );
+		wp_enqueue_script( 'so-bootstrap-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin' . SOW_BUNDLE_JS_SUFFIX . '.js', array(), SOW_BUNDLE_VERSION );
 	}
 
 	/**
@@ -233,8 +233,8 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 */
 	function admin_menu_init(){
 		add_plugins_page(
-			__('SiteOrigin Widgets', 'siteorigin-widgets'),
-			__('SiteOrigin Widgets', 'siteorigin-widgets'),
+			__('SOBS Widgets', 'so-bootstrap-widgets'),
+			__('SOBS Widgets', 'so-bootstrap-widgets'),
 			apply_filters('siteorigin_widgets_admin_menu_capability', 'install_plugins'),
 			'so-widgets-plugins',
 			array($this, 'admin_page')
@@ -261,9 +261,9 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 				<p>
 				<?php
 				printf(
-					__('%s was %s', 'siteorigin-widgets'),
+					__('%s was %s', 'so-bootstrap-widgets'),
 					$widgets[ $_GET['widget'].'/'.$_GET['widget'].'.php' ]['Name'],
-					$_GET['widget_action'] == 'activate' ? __('Activated', 'siteorigin-widgets') : __('Deactivated', 'siteorigin-widgets')
+					$_GET['widget_action'] == 'activate' ? __('Activated', 'so-bootstrap-widgets') : __('Deactivated', 'so-bootstrap-widgets')
 				)
 				?>
 				</p>
@@ -458,8 +458,8 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 * Add action links.
 	 */
 	function plugin_action_links($links){
-		$links[] = '<a href="' . admin_url('plugins.php?page=so-widgets-plugins') . '">'.__('Manage Widgets', 'siteorigin-widgets').'</a>';
-		$links[] = '<a href="http://siteorigin.com/thread/" target="_blank">'.__('Support', 'siteorigin-widgets').'</a>';
+		$links[] = '<a href="' . admin_url('plugins.php?page=so-widgets-plugins') . '">'.__('Manage Widgets', 'so-bootstrap-widgets').'</a>';
+		$links[] = '<a href="http://siteorigin.com/thread/" target="_blank">'.__('Support', 'so-bootstrap-widgets').'</a>';
 		return $links;
 	}
 
