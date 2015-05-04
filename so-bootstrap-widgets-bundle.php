@@ -130,7 +130,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 
 		if( empty($this->widget_folders) ) {
 			// We can use this filter to add more folders to use for widgets
-			$this->widget_folders = apply_filters('siteorigin_widgets_widget_folders', array(
+			$this->widget_folders = apply_filters('so_bootstrap_widgets_widget_folders', array(
 				plugin_dir_path(__FILE__).'widgets/'
 			) );
 		}
@@ -161,7 +161,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 		// Load all the widget we currently have active and filter them
 		$active_widgets = get_option( 'siteorigin_widgets_active', self::$default_active_widgets );
 		if( $filter ) {
-			$active_widgets = apply_filters( 'siteorigin_widgets_active_widgets',  $active_widgets);
+			$active_widgets = apply_filters( 'so_bootstrap_widgets_active_widgets',  $active_widgets);
 		}
 
 		return $active_widgets;
@@ -214,7 +214,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 */
 	function admin_ajax_manage_handler(){
 		if( !wp_verify_nonce($_GET['_wpnonce'], 'manage_so_widget') ) exit();
-		if( !current_user_can( apply_filters('siteorigin_widgets_admin_menu_capability', 'install_plugins') ) ) exit();
+		if( !current_user_can( apply_filters('so_bootstrap_widgets_admin_menu_capability', 'install_plugins') ) ) exit();
 		if( empty($_GET['widget']) ) exit();
 
 		if( $_POST['active'] == 'true' ) $this->activate_widget($_GET['widget']);
@@ -235,7 +235,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 		add_plugins_page(
 			__('SOBS Widgets', 'so-bootstrap-widgets'),
 			__('SOBS Widgets', 'so-bootstrap-widgets'),
-			apply_filters('siteorigin_widgets_admin_menu_capability', 'install_plugins'),
+			apply_filters('so_bootstrap_widgets_admin_menu_capability', 'install_plugins'),
 			'so-widgets-plugins',
 			array($this, 'admin_page')
 		);
