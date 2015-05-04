@@ -11,12 +11,12 @@ License: GPL3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 */
 
-define( 'SOW_BUNDLE_VERSION', '1.2.2' );
-define( 'SOW_BUNDLE_JS_SUFFIX', '' );
+define( 'SOBSW_BUNDLE_VERSION', '1.2.2' );
+define( 'SOBSW_BUNDLE_JS_SUFFIX', '' );
 define( 'SOW_BUNDLE_BASE_FILE', __FILE__ );
 
 // We're going to include this check until version 1.2
-if ( !function_exists( 'siteorigin_widget_get_plugin_path' ) ) {
+if( ! function_exists( 'siteorigin_widget_get_plugin_path' ) ) {
 	include plugin_dir_path(__FILE__ ) . 'base/inc.php';
 	include plugin_dir_path(__FILE__ ) . 'icons/icons.php';
 }
@@ -37,7 +37,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 		'so-post-carousel-widget' => true,
 	);
 
-	function __construct(){
+	function __construct() {
 		add_action( 'admin_init', array( $this, 'admin_activate_widget' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu_init' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -70,7 +70,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	static function single() {
 		static $single;
 
-		if ( empty( $single) ) {
+		if( empty( $single ) ) {
 			$single = new SiteOrigin_Bootstrap_Widgets_Bundle();
 		}
 
@@ -82,7 +82,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @action plugins_loaded
 	 */
-	function set_plugin_textdomain(){
+	function set_plugin_textdomain() {
 		load_plugin_textdomain( 'so-bootstrap-widgets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
@@ -91,24 +91,24 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @action admin_init
 	 */
-	function plugin_version_check(){
+	function plugin_version_check() {
 
 		$active_version = get_option( 'siteorigin_widget_bundle_version' );
 
-		if ( empty( $active_version) || version_compare( $active_version, SOW_BUNDLE_VERSION, '<' ) ) {
+		if( empty( $active_version) || version_compare( $active_version, SOBSW_BUNDLE_VERSION, '<' ) ) {
 			// If this is a new version, then clear the cache.
-			update_option( 'siteorigin_widget_bundle_version', SOW_BUNDLE_VERSION );
+			update_option( 'siteorigin_widget_bundle_version', SOBSW_BUNDLE_VERSION );
 			siteorigin_widgets_deactivate_legacy_plugins();
 
 			// Remove all cached CSS for SiteOrigin Widgets
-			if ( function_exists( 'WP_Filesystem' ) && WP_Filesystem() ) {
+			if( function_exists( 'WP_Filesystem' ) && WP_Filesystem() ) {
 				global $wp_filesystem;
 				$upload_dir = wp_upload_dir();
 
 				// Remove any old widget cache files, if they exist.
 				$list = $wp_filesystem->dirlist( $upload_dir['basedir'] . '/so-bootstrap-widgets/' );
-				if ( !empty( $list) ) {
-					foreach( $list as $file) {
+				if( ! empty( $list ) ) {
+					foreach( $list as $file ) {
 						// Delete the file
 						$wp_filesystem->delete( $upload_dir['basedir'] . '/so-bootstrap-widgets/' . $file['name'] );
 					}
@@ -116,7 +116,7 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 			}
 
 			// An action to let widgets handle the updates.
-			do_action( 'siteorigin_widgets_version_update', SOW_BUNDLE_VERSION, $active_version );
+			do_action( 'so_bootstrap_widgets_version_update', SOBSW_BUNDLE_VERSION, $active_version );
 		}
 
 	}
@@ -126,9 +126,9 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @action plugins_loaded
 	 */
-	function load_widget_plugins(){
+	function load_widget_plugins() {
 
-		if ( empty( $this->widget_folders) ) {
+		if( empty( $this->widget_folders ) ) {
 			// We can use this filter to add more folders to use for widgets
 			$this->widget_folders = apply_filters( 'so_bootstrap_widgets_widget_folders', array(
 				plugin_dir_path(__FILE__ ) . 'widgets/'
@@ -138,13 +138,13 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 		// Load all the widget we currently have active and filter them
 		$active_widgets = $this->get_active_widgets();
 
-		foreach( array_keys( $active_widgets) as $widget_id ) {
+		foreach( array_keys( $active_widgets ) as $widget_id ) {
 
 			foreach( $this->widget_folders as $folder ) {
-				if ( !file_exists( $folder . $widget_id. '/'.$widget_id. '.php' ) ) continue;
+				if( ! file_exists( $folder . $widget_id . '/'.$widget_id . '.php' ) ) continue;
 
 				// Include this widget file
-				include_once $folder . $widget_id. '/'.$widget_id. '.php';
+				include_once $folder . $widget_id . '/'.$widget_id . '.php';
 			}
 
 		}
@@ -157,11 +157,11 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @return mixed|void
 	 */
-	function get_active_widgets( $filter = true ){
+	function get_active_widgets( $filter = true ) {
 		// Load all the widget we currently have active and filter them
-		$active_widgets = get_option( 'siteorigin_widgets_active', self::$default_active_widgets );
-		if ( $filter ) {
-			$active_widgets = apply_filters( 'so_bootstrap_widgets_active_widgets',  $active_widgets);
+		$active_widgets = get_option( 'so_bootstrap_widgets_active', self::$default_active_widgets );
+		if( $filter ) {
+			$active_widgets = apply_filters( 'so_bootstrap_widgets_active_widgets',  $active_widgets );
 		}
 
 		return $active_widgets;
@@ -171,24 +171,24 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 * Enqueue the admin page stuff.
 	 */
 	function admin_enqueue_scripts( $prefix) {
-		if ( $prefix != 'plugins_page_so-widgets-plugins' ) return;
-		wp_enqueue_style( 'so-bootstrap-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin.css', array(), SOW_BUNDLE_VERSION );
-		wp_enqueue_script( 'so-bootstrap-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin' . SOW_BUNDLE_JS_SUFFIX . '.js', array(), SOW_BUNDLE_VERSION );
+		if( $prefix != 'plugins_page_so-bootstrap-widgets-plugins' ) return;
+		wp_enqueue_style( 'so-bootstrap-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin.css', array(), SOBSW_BUNDLE_VERSION );
+		wp_enqueue_script( 'so-bootstrap-widgets-manage-admin', plugin_dir_url( __FILE__ ) . 'admin/admin' . SOBSW_BUNDLE_JS_SUFFIX . '.js', array(), SOBSW_BUNDLE_VERSION );
 	}
 
 	/**
 	 * The fallback (from ajax) URL handler for activating or deactivating a widget
 	 */
 	function admin_activate_widget() {
-		if (
-			!empty( $_GET['page'])
-			&& $_GET['page'] == 'so-widgets-plugins'
-			&& !empty( $_GET['widget_action'] ) && !empty( $_GET['widget'] )
-			&& isset( $_GET['_wpnonce'])
+		if(
+			! empty( $_GET['page'] )
+			&& $_GET['page'] == 'so-bootstrap-widgets-plugins'
+			&& ! empty( $_GET['widget_action'] ) && ! empty( $_GET['widget'] )
+			&& isset( $_GET['_wpnonce'] )
 			&& wp_verify_nonce( $_GET['_wpnonce'], 'siteorigin_widget_action' )
 		) {
 
-			switch( $_GET['widget_action']) {
+			switch( $_GET['widget_action'] ) {
 				case 'activate':
 					$this->activate_widget( $_GET['widget'] );
 					break;
@@ -212,17 +212,17 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @action wp_ajax_so_widgets_bundle_manage
 	 */
-	function admin_ajax_manage_handler(){
-		if ( !wp_verify_nonce( $_GET['_wpnonce'], 'manage_so_widget' ) ) exit();
-		if ( !current_user_can( apply_filters( 'so_bootstrap_widgets_admin_menu_capability', 'install_plugins' ) ) ) exit();
-		if ( empty( $_GET['widget']) ) exit();
+	function admin_ajax_manage_handler() {
+		if( ! wp_verify_nonce( $_GET['_wpnonce'], 'manage_so_widget' ) ) exit();
+		if( ! current_user_can( apply_filters( 'so_bootstrap_widgets_admin_menu_capability', 'install_plugins' ) ) ) exit();
+		if( empty( $_GET['widget'] ) ) exit();
 
-		if ( $_POST['active'] == 'true' ) $this->activate_widget( $_GET['widget']);
+		if( $_POST['active'] == 'true' ) $this->activate_widget( $_GET['widget'] );
 		else $this->deactivate_widget( $_GET['widget'] );
 
 		// Send a kind of dummy response.
 		header( 'content-type: application/json' );
-		echo json_encode(array( 'done' => true));
+		echo json_encode(array( 'done' => true ));
 		exit();
 	}
 
@@ -231,12 +231,12 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @action admin_menu
 	 */
-	function admin_menu_init(){
+	function admin_menu_init() {
 		add_plugins_page(
 			__( 'SOBS Widgets', 'so-bootstrap-widgets' ),
 			__( 'SOBS Widgets', 'so-bootstrap-widgets' ),
 			apply_filters( 'so_bootstrap_widgets_admin_menu_capability', 'install_plugins' ),
-			'so-widgets-plugins',
+			'so-bootstrap-widgets-plugins',
 			array( $this, 'admin_page' )
 		);
 	}
@@ -244,16 +244,16 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	/**
 	 * Display the admin page.
 	 */
-	function admin_page(){
+	function admin_page() {
 
 		$bundle = SiteOrigin_Bootstrap_Widgets_Bundle::single();
 		$widgets = $bundle->get_widgets_list();
 
-		if (
-			isset( $_GET['widget_action_done'])
-			&& !empty( $_GET['widget_action'])
-			&& !empty( $_GET['widget'])
-			&& !empty( $widgets[ $_GET['widget']. '/'.$_GET['widget']. '.php' ] )
+		if(
+			isset( $_GET['widget_action_done'] )
+			&& ! empty( $_GET['widget_action'] )
+			&& ! empty( $_GET['widget'] )
+			&& ! empty( $widgets[ $_GET['widget']. '/'.$_GET['widget']. '.php' ] )
 		) {
 
 			?>
@@ -278,17 +278,17 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 * Get javascript variables for admin.
 	 */
 	function admin_ajax_get_javascript_variables() {
-		if ( empty( $_REQUEST['_widgets_nonce'] ) || !wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) return;
+		if( empty( $_REQUEST['_widgets_nonce'] ) || ! wp_verify_nonce( $_REQUEST['_widgets_nonce'], 'widgets_action' ) ) return;
 		$result = array();
 		$widget_class = $_POST['widget'];
 		global $wp_widget_factory;
-		if ( ! empty( $wp_widget_factory->widgets[ $widget_class ] ) ) {
+		if( ! empty( $wp_widget_factory->widgets[ $widget_class ] ) ) {
 			$widget = $wp_widget_factory->widgets[ $widget_class ];
-			if ( method_exists( $widget, 'get_javascript_variables' ) ) $result = $widget->get_javascript_variables();
+			if( method_exists( $widget, 'get_javascript_variables' ) ) $result = $widget->get_javascript_variables();
 		}
 
 		header( 'content-type: application/json' );
-		echo json_encode( $result);
+		echo json_encode( $result );
 
 		exit();
 	}
@@ -301,36 +301,35 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @return bool
 	 */
-	function activate_widget( $widget_id, $include = true ){
+	function activate_widget( $widget_id, $include = true ) {
 		$exists = false;
 		foreach( $this->widget_folders as $folder ) {
-			if ( !file_exists( $folder . $widget_id . '/' . $widget_id . '.php' ) ) continue;
+			if( ! file_exists( $folder . $widget_id . '/' . $widget_id . '.php' ) ) continue;
 			$exists = true;
 		}
 
-		if ( !$exists ) return false;
+		if( ! $exists ) return false;
 
 		// There are times when we activate several widgets at once, so clear the cache.
-		wp_cache_delete( 'siteorigin_widgets_active', 'options' );
+		wp_cache_delete( 'so_bootstrap_widgets_active', 'options' );
 		$active_widgets = $this->get_active_widgets();
 		$active_widgets[$widget_id] = true;
-		update_option( 'siteorigin_widgets_active', $active_widgets );
+		update_option( 'so_bootstrap_widgets_active', $active_widgets );
 
 		// If we don't want to include the widget files, then our job here is done.
-		if (!$include) return;
+		if( ! $include ) return;
 
 		// Now, lets actually include the files
 		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 		foreach( $this->widget_folders as $folder ) {
-			if ( !file_exists( $folder . $widget_id . '/' . $widget_id . '.php' ) ) continue;
+			if( ! file_exists( $folder . $widget_id . '/' . $widget_id . '.php' ) ) continue;
 			include_once $folder . $widget_id . '/' . $widget_id . '.php';
 
-			if ( has_action( 'widgets_init' ) ) {
+			if( has_action( 'widgets_init' ) ) {
 				siteorigin_widgets_widgets_init();
 			}
 		}
-
 
 		return true;
 	}
@@ -340,16 +339,16 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @param $id
 	 */
-	function deactivate_widget( $id){
+	function deactivate_widget( $id ) {
 		$active_widgets = $this->get_active_widgets();
-		unset( $active_widgets[$id]);
-		update_option( 'siteorigin_widgets_active', $active_widgets );
+		unset( $active_widgets[$id] );
+		update_option( 'so_bootstrap_widgets_active', $active_widgets );
 	}
 
 	/**
 	 * Gets a list of all available widgets
 	 */
-	function get_widgets_list(){
+	function get_widgets_list() {
 		$active = $this->get_active_widgets();
 
 		$default_headers = array(
@@ -362,20 +361,20 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 		);
 
 		$widgets = array();
-		foreach( $this->widget_folders as $folder) {
+		foreach( $this->widget_folders as $folder ) {
 
 			$files = glob( $folder. '*/*.php' );
-			foreach( $files as $file) {
-				$widget = get_file_data( $file, $default_headers, 'siteorigin-widget' );
+			foreach( $files as $file ) {
+				$widget = get_file_data( $file, $default_headers, 'so-bootstrap-widget' );
 				//skip the file if it's missing a name
-				if ( empty( $widget['Name'] ) ) {
+				if( empty( $widget['Name'] ) ) {
 					continue;
 				}
-				$f = pathinfo( $file);
+				$f = pathinfo( $file );
 				$id = $f['filename'];
 
 				$widget['ID'] = $id;
-				$widget['Active'] = !empty( $active[$id]);
+				$widget['Active'] = ! empty( $active[$id] );
 				$widget['File'] = $file;
 
 				$widgets[$file] = $widget;
@@ -409,21 +408,21 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @action siteorigin_panels_data
 	 */
-	function load_missing_widgets( $data){
-		if (empty( $data['widgets'])) return $data;
+	function load_missing_widgets( $data) {
+		if(empty( $data['widgets'] )) return $data;
 
 		global $wp_widget_factory;
 
-		foreach( $data['widgets'] as $widget) {
-			if ( empty( $widget['panels_info']['class']) ) continue;
-			if ( !empty( $wp_widget_factory->widgets[$widget['panels_info']['class']] ) ) continue;
+		foreach( $data['widgets'] as $widget ) {
+			if( empty( $widget['panels_info']['class'] ) ) continue;
+			if( ! empty( $wp_widget_factory->widgets[$widget['panels_info']['class']] ) ) continue;
 
 			$class = $widget['panels_info']['class'];
-			if ( preg_match( '/SiteOrigin_Widget_([A-Za-z]+)_Widget/', $class, $matches) ) {
+			if( preg_match( '/SiteOrigin_Widget_([A-Za-z]+)_Widget/', $class, $matches ) ) {
 				$name = $matches[1];
-				$id = 'so'.strtolower( implode( '-', preg_split( '/(?=[A-Z])/',$name) ) ) . '-widget';
+				$id = 'so'.strtolower( implode( '-', preg_split( '/(?=[A-Z] )/',$name ) ) ) . '-widget';
 
-				$this->activate_widget( $id, true);
+				$this->activate_widget( $id, true );
 			}
 		}
 
@@ -438,17 +437,17 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 *
 	 * @return
 	 */
-	function load_missing_widget( $the_widget, $class){
+	function load_missing_widget( $the_widget, $class ) {
 		// We only want to worry about missing widgets
-		if ( !empty( $the_widget) ) return $the_widget;
+		if( ! empty( $the_widget ) ) return $the_widget;
 
-		if ( preg_match( '/SiteOrigin_Widget_([A-Za-z]+)_Widget/', $class, $matches) ) {
+		if( preg_match( '/SiteOrigin_Widget_([A-Za-z]+)_Widget/', $class, $matches ) ) {
 			$name = $matches[1];
-			$id = 'so'.strtolower( implode( '-', preg_split( '/(?=[A-Z])/',$name) ) ) . '-widget';
+			$id = 'so'.strtolower( implode( '-', preg_split( '/(?=[A-Z] )/',$name ) ) ) . '-widget';
 
-			$this->activate_widget( $id, true);
+			$this->activate_widget( $id, true );
 			global $wp_widget_factory;
-			if ( !empty( $wp_widget_factory->widgets[$class]) ) return $wp_widget_factory->widgets[$class];
+			if( ! empty( $wp_widget_factory->widgets[$class] ) ) return $wp_widget_factory->widgets[$class];
 		}
 
 		return $the_widget;
@@ -457,8 +456,8 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	/**
 	 * Add action links.
 	 */
-	function plugin_action_links( $links){
-		$links[] = '<a href="' . admin_url( 'plugins.php?page=so-widgets-plugins' ) . '">'.__( 'Manage Widgets', 'so-bootstrap-widgets' ) . '</a>';
+	function plugin_action_links( $links ) {
+		$links[] = '<a href="' . admin_url( 'plugins.php?page=so-bootstrap-widgets-plugins' ) . '">'.__( 'Manage Widgets', 'so-bootstrap-widgets' ) . '</a>';
 		$links[] = '<a href="http://siteorigin.com/thread/" target="_blank">'.__( 'Support', 'so-bootstrap-widgets' ) . '</a>';
 		return $links;
 	}
@@ -470,15 +469,15 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 		global $wp_registered_widgets;
 		$sidebars_widgets = wp_get_sidebars_widgets();
 		foreach( $sidebars_widgets as $sidebar => $widgets ) {
-			if ( ! empty( $widgets ) && $sidebar !== "wp_inactive_widgets") {
+			if( ! empty( $widgets ) && $sidebar !== "wp_inactive_widgets") {
 				foreach ( $widgets as $i => $id ) {
-					if ( ! empty( $wp_registered_widgets[$id] ) ) {
+					if( ! empty( $wp_registered_widgets[$id] ) ) {
 						$widget = $wp_registered_widgets[$id]['callback'][0];
-						if ( !empty( $widget) && is_object( $widget) && is_subclass_of( $widget, 'SiteOrigin_Widget' ) && is_active_widget( false, false, $widget->id_base ) ) {
+						if( ! empty( $widget ) && is_object( $widget ) && is_subclass_of( $widget, 'SiteOrigin_Widget' ) && is_active_widget( false, false, $widget->id_base ) ) {
 							$opt_wid = get_option( 'widget_' . $widget->id_base );
 							preg_match( '/-([0-9]+$)/', $id, $num_match );
 							$widget_instance = $opt_wid[ $num_match[1] ];
-							$widget->enqueue_frontend_scripts( $widget_instance);
+							$widget->enqueue_frontend_scripts( $widget_instance );
 							$widget->generate_and_enqueue_instance_styles( $widget_instance );
 						}
 					}
@@ -498,13 +497,13 @@ $sow_meta_box_manager = SiteOrigin_Widget_Meta_Box_Manager::single();
 /**
  * Deactivate any old widget plugins that we used to have on the directory. We'll remove this after version 1.2.
  */
-function siteorigin_widgets_deactivate_legacy_plugins(){
+function siteorigin_widgets_deactivate_legacy_plugins() {
 	// All we want to do here is disable all legacy widgets
 	$the_plugins = get_option('active_plugins');
-	foreach($the_plugins as $plugin_id) {
-		if( preg_match('/^so-([a-z\-]+)-widget\/so-([a-z\-]+)-widget\.php$/', $plugin_id) ) {
+	foreach($the_plugins as $plugin_id ) {
+		if( preg_match('/^so-([a-z\-]+)-widget\/so-([a-z\-]+)-widget\.php$/', $plugin_id ) ) {
 			// Deactivate the legacy plugin
-			deactivate_plugins($plugin_id, true);
+			deactivate_plugins($plugin_id, true );
 		}
 	}
 }
