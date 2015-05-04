@@ -1,12 +1,12 @@
 <?php
 
 /*
-Plugin Name: SiteOrigin Widgets Bundle
-Description: A collection of all our widgets, neatly bundled into a single plugin.
-Version: 1.2.2
-Author: SiteOrigin
-Author URI: http://siteorigin.com
-Plugin URI: http://siteorigin.com/widgets-bundle/
+Plugin Name: SiteOrigin Bootstrap Widgets Bundle
+Description: A collection of bootstrap compatible SiteOrigin widgets, neatly bundled into a single plugin.
+Version: 1.0.0
+Author: Duane Cilliers
+Author URI: http://duane.co.za
+Plugin URI: http://duane.co.za/so-bootstrap-widgets-bundle/
 License: GPL3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 */
@@ -22,7 +22,7 @@ if( !function_exists('siteorigin_widget_get_plugin_path') ) {
 }
 
 
-class SiteOrigin_Widgets_Bundle {
+class SiteOrigin_Bootstrap_Widgets_Bundle {
 
 	private $widget_folders;
 
@@ -65,13 +65,13 @@ class SiteOrigin_Widgets_Bundle {
 	/**
 	 * Get the single of this plugin
 	 *
-	 * @return SiteOrigin_Widgets_Bundle
+	 * @return SiteOrigin_Bootstrap_Widgets_Bundle
 	 */
 	static function single() {
 		static $single;
 
 		if( empty($single) ) {
-			$single = new SiteOrigin_Widgets_Bundle();
+			$single = new SiteOrigin_Bootstrap_Widgets_Bundle();
 		}
 
 		return $single;
@@ -246,7 +246,7 @@ class SiteOrigin_Widgets_Bundle {
 	 */
 	function admin_page(){
 
-		$bundle = SiteOrigin_Widgets_Bundle::single();
+		$bundle = SiteOrigin_Bootstrap_Widgets_Bundle::single();
 		$widgets = $bundle->get_widgets_list();
 
 		if(
@@ -489,7 +489,7 @@ class SiteOrigin_Widgets_Bundle {
 }
 
 // create the initial single
-SiteOrigin_Widgets_Bundle::single();
+SiteOrigin_Bootstrap_Widgets_Bundle::single();
 
 // Initialize the Meta Box Manager
 global $sow_meta_box_manager;
