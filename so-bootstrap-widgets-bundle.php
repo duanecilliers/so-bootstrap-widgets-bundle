@@ -31,10 +31,8 @@ class SiteOrigin_Bootstrap_Widgets_Bundle {
 	 */
 	static $default_active_widgets = array(
 		'so-button-widget' => true,
-		'so-google-map-widget' => true,
 		'so-image-widget' => true,
 		'so-slider-widget' => true,
-		'so-post-carousel-widget' => true,
 	);
 
 	function __construct() {
