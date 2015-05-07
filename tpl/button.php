@@ -38,6 +38,26 @@ if ( !empty( $instance['design']['size'] ) ) {
 	}
 }
 
+if ( !empty( $instance['design']['style'] ) ) {
+	switch ( $instance['design']['style'] ) {
+		case 'primary':
+			$classes[] = 'btn-primary';
+			break;
+		case 'success':
+			$classes[] = 'btn-success';
+			break;
+		case 'info':
+			$classes[] = 'btn-info';
+			break;
+		case 'warning':
+			$classes[] = 'btn-warning';
+			break;
+		case 'danger':
+			$classes[] = 'btn-danger';
+			break;
+	}
+}
+
 $wrapper_classes = implode( ' ', $wrapper_classes );
 
 $button_attributes = array(

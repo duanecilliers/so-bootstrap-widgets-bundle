@@ -34,6 +34,20 @@ class SO_Bootstrap_Widget_Bundle {
 					'large' => __( 'Large', 'so-bootstrap-widgets-bundle' )
 				)
 			);
+
+			$form_options['design']['fields']['style'] = array(
+				'type' => 'select',
+				'label' => __('Button Style', 'so-bootstrap-widgets-bundle'),
+				'default' => 'primary',
+				'options' => array(
+					'default' => __( 'Default', 'so-bootstrap-widgets-bundle' ),
+					'primary' => __( 'Primary', 'so-bootstrap-widgets-bundle' ),
+					'success' => __( 'Success', 'so-bootstrap-widgets-bundle' ),
+					'info' => __( 'Info', 'so-bootstrap-widgets-bundle' ),
+					'warning' => __( 'Warning', 'so-bootstrap-widgets-bundle' ),
+					'danger' => __( 'Danger', 'so-bootstrap-widgets-bundle' )
+				)
+			);
 		}
 		return $form_options;
 	}
