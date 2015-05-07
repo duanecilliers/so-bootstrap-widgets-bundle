@@ -24,6 +24,20 @@ if ( !empty( $instance['design']['align'] ) ) {
 	}
 }
 
+if ( !empty( $instance['design']['size'] ) ) {
+	switch ($instance['design']['size'] ) {
+		case 'extra_small':
+			$classes[] = 'btn-xs';
+			break;
+		case 'small':
+			$classes[] = 'btn-sm';
+			break;
+		case 'large':
+			$classes[] = 'btn-lg';
+			break;
+	}
+}
+
 $wrapper_classes = implode( ' ', $wrapper_classes );
 
 $button_attributes = array(
@@ -62,9 +76,3 @@ if( !empty( $instance['attributes']['onclick'] ) ) $button_attributes['onclick']
 <?php if ( $wrapper ) : ?>
 </div>
 <?php endif; ?>
-
-<?php
-	if ( $instance['text'] == 'Medium Button' ) {
-		wp_die( '<pre>' . print_r($instance, true) . '</pre>' );
-	}
-?>
