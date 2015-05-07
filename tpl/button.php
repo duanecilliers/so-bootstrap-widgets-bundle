@@ -2,6 +2,30 @@
 $classes = array();
 $classes[] = 'btn';
 $classes[] = 'btn-primary';
+
+$wrapper = false;
+$wrapper_classes = array();
+
+if ( !empty( $instance['design']['align'] ) ) {
+	switch ( $instance['design']['align'] ) {
+		case 'left':
+			$classes[] = 'pull-left';
+			break;
+		case 'center':
+			$wrapper = true;
+			$wrapper_classes[] = 'text-center';
+			break;
+		case 'right':
+			$classes[] = 'pull-right';
+			break;
+		case 'justify':
+			$classes[] = 'center-block';
+			break;
+	}
+}
+
+$wrapper_classes = implode( ' ', $wrapper_classes );
+
 $button_attributes = array(
 	'class' => esc_attr( implode(' ', $classes) )
 );
@@ -12,21 +36,35 @@ if( !empty( $instance['attributes']['title'] ) ) $button_attributes['title'] = e
 if( !empty( $instance['attributes']['onclick'] ) ) $button_attributes['onclick'] = esc_attr( $instance['attributes']['onclick'] );
 ?>
 
-<a <?php foreach( $button_attributes as $name => $val) echo $name . '="' . $val . '" ' ?>>
-	<?php
-		if( !empty( $instance['button_icon']['icon'] ) ) {
-			$attachment = wp_get_attachment_image_src( $instance['button_icon']['icon'] );
-			if(!empty( $attachment) ) {
-				$icon_styles[] = 'background-image: url(' . sow_esc_url( $attachment[0] ) . ')';
-				?><div class="sow-icon-image" style="<?php echo implode('; ', $icon_styles) ?>"></div><?php
-			}
-		}
-		else {
-			$icon_styles = array();
-			if(!empty( $instance['button_icon']['icon_color'] ) ) $icon_styles[] = 'color: '.$instance['button_icon']['icon_color'];
-			echo siteorigin_widget_get_icon( $instance['button_icon']['icon_selected'], $icon_styles);
-		}
-	?>
+<?php if ( $wrapper ) : ?>
+<div class="<?php echo $wrapper_classes; ?>">
+<?php endif; ?>
 
-	<?php echo wp_kses_post( $instance['text'] ) ?>
-</a>
+	<a <?php foreach( $button_attributes as $name => $val) echo $name . '="' . $val . '" ' ?>>
+		<?php
+			if( !empty( $instance['button_icon']['icon'] ) ) {
+				$attachment = wp_get_attachment_image_src( $instance['button_icon']['icon'] );
+				if(!empty( $attachment) ) {
+					$icon_styles[] = 'background-image: url(' . sow_esc_url( $attachment[0] ) . ')';
+					?><div class="sow-icon-image" style="<?php echo implode('; ', $icon_styles) ?>"></div><?php
+				}
+			}
+			else {
+				$icon_styles = array();
+				if(!empty( $instance['button_icon']['icon_color'] ) ) $icon_styles[] = 'color: '.$instance['button_icon']['icon_color'];
+				echo siteorigin_widget_get_icon( $instance['button_icon']['icon_selected'], $icon_styles);
+			}
+		?>
+
+		<?php echo wp_kses_post( $instance['text'] ) ?>
+	</a>
+
+<?php if ( $wrapper ) : ?>
+</div>
+<?php endif; ?>
+
+<?php
+	if ( $instance['text'] == 'Medium Button' ) {
+		wp_die( '<pre>' . print_r($instance, true) . '</pre>' );
+	}
+?>
