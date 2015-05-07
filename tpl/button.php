@@ -1,7 +1,6 @@
 <?php
 $classes = array();
 $classes[] = 'btn';
-$classes[] = 'btn-primary';
 
 $wrapper = false;
 $wrapper_classes = array();
