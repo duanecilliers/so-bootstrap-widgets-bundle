@@ -3,7 +3,7 @@
 /*
 Plugin Name: SiteOrigin Bootstrap Widgets Bundle
 Description: Overwrites widget templates in SiteOrigin Widgets Bundle and includes extra widgets.
-Version: 1.0.0
+Version: 0.0.1
 Author: Duane Cilliers
 Author URI: http://duane.co.za
 Plugin URI: http://duane.co.za/plugins/so-bootstrap-widgets-bundle/
